@@ -2,8 +2,8 @@ version: v1.0
 name: Run tmate for 6 hours
 agent:
   machine:
+    os_image: ubuntu2004
     type: e1-standard-2
-    os_image: ubuntu2204
 blocks:
   - name: Download and Run tmate for 6 hours
     task:
