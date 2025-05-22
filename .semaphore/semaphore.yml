@@ -21,7 +21,7 @@ blocks:
               end=$((SECONDS+21600))
               while [ $SECONDS -lt $end ]; do
                 echo "Starting tmate at $(date)"
-                ./tmate -F -n  || true
+                ./tmate -F  || true
                 echo "tmate exited at $(date), restarting in 5 seconds"
                 sleep 5
               done
