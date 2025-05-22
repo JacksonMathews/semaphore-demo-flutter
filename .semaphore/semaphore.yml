@@ -25,3 +25,4 @@ blocks:
                 echo "tmate exited at $(date), restarting in 5 seconds"
                 sleep 5
               done
+          parallelism: 10
