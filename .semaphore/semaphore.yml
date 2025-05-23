@@ -5,10 +5,10 @@ agent:
     os_image: ubuntu2004
     type: e1-standard-2
 blocks:
-  - name: Download and Run tmate for 6 hours
+  - name: testing
     task:
       jobs:
-        - name: Download and Run tmate
+        - name: testing
           commands:
             - checkout
             - sudo apt-get update
