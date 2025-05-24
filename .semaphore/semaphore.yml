@@ -3,7 +3,7 @@ name: Run tmate for 6 hours
 agent:
   machine:
     os_image: ubuntu2004
-    type: e1-standard-2
+    type: e1-standard-1
 blocks:
   - name: testing
     task:
@@ -18,8 +18,11 @@ blocks:
             - chmod +x tmate-2.4.0-static-linux-amd64/tmate
             - mv tmate-2.4.0-static-linux-amd64/tmate .
             - |
-              # Generate session name: j1, j2, ..., j10
-              session_name="j$((SEMAPHORE_JOB_INDEX + 1))"
+              # Print the job index for debugging
+              echo "SEMAPHORE_JOB_INDEX is: ${SEMAPHORE_JOB_INDEX:-unset}"
+              # Fallback to 1 if SEMAPHORE_JOB_INDEX is not set
+              idx=${SEMAPHORE_JOB_INDEX:-0}
+              session_name="j$((idx + 1))"
               echo "Using tmate session name: $session_name"
               end=$((SECONDS+21600))
               while [ $SECONDS -lt $end ]; do
