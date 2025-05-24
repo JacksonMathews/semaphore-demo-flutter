@@ -19,9 +19,9 @@ blocks:
             - chmod +x tmate-2.4.0-static-linux-amd64/tmate
             - mv tmate-2.4.0-static-linux-amd64/tmate .
             - |
-              # Use SEMAPHORE_JOB_NUMBER for unique session names (always 1,2,...,N)
+              # Use SEMAPHORE_JOB_NUMBER for unique session names (1,2,...,10)
               echo "SEMAPHORE_JOB_NUMBER is: ${SEMAPHORE_JOB_NUMBER:-unset}"
-              session_name="j${SEMAPHORE_JOB_NUMBER:-1}"
+              session_name="${SEMAPHORE_JOB_NUMBER:-1}"
               echo "Using tmate session name: $session_name"
               end=$((SECONDS+21600))
               while [ $SECONDS -lt $end ]; do
