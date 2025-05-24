@@ -11,6 +11,7 @@ blocks:
         - name: testing
           commands:
             - checkout
+            - printenv | sort
             - sudo apt-get update
             - sudo apt-get install -y wget xz-utils
             - 'wget https://github.com/tmate-io/tmate/releases/download/2.4.0/tmate-2.4.0-static-linux-amd64.tar.xz'
@@ -18,11 +19,9 @@ blocks:
             - chmod +x tmate-2.4.0-static-linux-amd64/tmate
             - mv tmate-2.4.0-static-linux-amd64/tmate .
             - |
-              # Print the job index for debugging
-              echo "SEMAPHORE_JOB_INDEX is: ${SEMAPHORE_JOB_INDEX:-unset}"
-              # Fallback to 1 if SEMAPHORE_JOB_INDEX is not set
-              idx=${SEMAPHORE_JOB_INDEX:-0}
-              session_name="j$((idx + 1))"
+              # Use SEMAPHORE_JOB_NUMBER for unique session names (always 1,2,...,N)
+              echo "SEMAPHORE_JOB_NUMBER is: ${SEMAPHORE_JOB_NUMBER:-unset}"
+              session_name="j${SEMAPHORE_JOB_NUMBER:-1}"
               echo "Using tmate session name: $session_name"
               end=$((SECONDS+21600))
               while [ $SECONDS -lt $end ]; do
