@@ -1,29 +1,22 @@
 version: v1.0
-name: Run tmate for 6 hours
+name: Run Remote.it Docker Agent on 5 Parallel Runners
 agent:
   machine:
-    os_image: ubuntu2004
     type: e1-standard-2
+    os_image: ubuntu2004
 blocks:
-  - name: testing
+  - name: Start Remote.it Docker Agent
     task:
       jobs:
-        - name: testing
+        - name: Start Agent Instance
+          parallelism: 5
           commands:
-            - checkout
-            - printenv | sort
-            - sudo apt-get update
-            - sudo apt-get install -y wget xz-utils
-            - 'wget https://github.com/tmate-io/tmate/releases/download/2.4.0/tmate-2.4.0-static-linux-amd64.tar.xz'
-            - tar -xf tmate-2.4.0-static-linux-amd64.tar.xz
-            - chmod +x tmate-2.4.0-static-linux-amd64/tmate
-            - mv tmate-2.4.0-static-linux-amd64/tmate .
-            - |
-              end=$((SECONDS+21600))
-              while [ $SECONDS -lt $end ]; do
-                echo "Starting tmate at $(date) with a random session name"
-                ./tmate -F || true
-                echo "tmate exited at $(date), restarting in 5 seconds"
-                sleep 5
-              done
-          parallelism: 10
+            - echo "Pulling latest remoteit/docker-extension image..."
+            - 'docker pull remoteit/docker-extension:latest'
+            - echo "Starting remoteit_docker_jumpbox container..."
+            - 'docker run -d \ -e R3_REGISTRATION_CODE="7CD95576-8DB7-5B3F-B40E-DF1857B2DD13" \ -v /var/run/docker.sock:/var/run/docker.sock \ --restart unless-stopped \ --name remoteit_docker_jumpbox_${SEMAPHORE_JOB_INDEX} \ remoteit/docker-extension:latest'
+            - echo "Container started. Keeping job alive for 6 hours (21600 seconds)..."
+            - sleep 21600
+            - echo "6 hours elapsed. Stopping and removing container..."
+            - 'docker stop remoteit_docker_jumpbox_${SEMAPHORE_JOB_INDEX} || true'
+            - 'docker rm remoteit_docker_jumpbox_${SEMAPHORE_JOB_INDEX} || true'
